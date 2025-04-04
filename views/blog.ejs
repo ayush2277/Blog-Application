@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("./partials/head") %>
+    <title>Blog</title>   
+</head>
+<body>
+    <%- include("./partials/nav") %> 
+
+    <!-- Blog Content -->
+    <div class="container mt-4">
+        <h1><%= blog.title %></h1>
+        <img src="<%= blog.coverImageURL %>" width="700px" />
+        <pre><%= blog.body %></pre>
+    </div>
+
+    <!-- Author Information -->
+    <div class="container mt-4">
+        <img src="<%= blog.createdBy.profileImageURL %>" width="50px" />
+        <%= blog.createdBy.fullName %>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="container mt-3">
+        <h1>Comments (<%= comments.length %>)</h1>
+
+        <!-- Show comment form only if user is logged in -->
+        <% if (locals.user) { %>
+            <form action="/blog/comment/<%= blog._id %>" method="post">
+                <div class="mb-3">
+                    <input type="text" name="content" class="form-control" id="content" placeholder="Enter your Comment">
+                </div>
+                <button class="btn btn-sm btn-primary" type="submit">Add</button>
+            </form>
+        <% } %>
+
+        <!-- Display comments (visible to all users) -->
+        <div class="mt-3">
+            <% comments.forEach(comment => { %>
+                <div class="mb-3 p-2 border rounded">
+                    <img src="<%= comment.createdBy.profileImageURL %>" width="50px" />
+                    <strong><%= comment.createdBy.fullName %></strong>
+                    <pre><%= comment.content %></pre> 
+                </div>
+            <% }) %>
+        </div>
+    </div>
+
+    <%- include("./partials/script") %>
+</body>
+</html>
